@@ -1,0 +1,3 @@
+Compléter le fichier README.txt
+Documenter la procédure d'installation
+Faire une documentation avec les fonctions accessibles pour le thème.
