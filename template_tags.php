@@ -13,7 +13,10 @@
  * @return string the html and javascript snippets to display a map
  */
 function map($width, $height, $flashvars) { 
-$options = get_option('wpsmap_options');
+    $options = get_option('wpsmap_options');
+    if(!isset($flashvars['wpsplanname'])) {
+        $flashvars['wpsplanname'] = $options['plan_name'];
+    }  
     $map = '
         <style type="text/css" media="screen"> 
             object:focus { outline:none; }
@@ -23,44 +26,56 @@ $options = get_option('wpsmap_options');
         <script type="text/javascript">
             function getMap() {
                 if (navigator.appName.indexOf ("Microsoft") !=-1) {
-
                     return window["wps-flex"];
-                } else {
+                }
+                else {
                     return document["wps-flex"];
                 }
             }
             
-        	function ready() {
-        		// do something here
-        	}
-        	function status( status) {
-        		// do something here
-        	}
-        	function error( error) {
-        		alert( error);
-        	}
-        	function navigate( url, target) {
-        		// alert("url :"  + url + ", target : " + target); 
-        		// Nothing to do here, using native flex behavior
-        	}
-        	// Actions that are swatch defined
-	        function NewWin( args)
-	        {
-		        var parameters = {};
-		        parameters["entityId"] = args[0];
-        		getMap().compute( parameters);
-	        }
-	        function Discover( args)
-	        {
-		        var parameters = {};
-		        parameters["attributeId"] = args[0];
-		        parameters["analysisProfile"] = "DiscoveryProfile";
-        		getMap().compute( parameters);
-	        }
+            function ready() {
+        	// do something here
+            }
+            
+            function status(status) {
+        	// do something here
+            }
+            
+            function error(error) {
+        	alert(error);
+            }
+
+
+            /* Actions that are defined in swatch configuration */
+            function navigate(url, target) {
+        	// Nothing to do here, using native flex behavior
+            }
+        	 
+            /* 
+            // Called when an entity is selected (link = a tag here)/
+	    function NewWin(args) {
+	        var redirectUrl = "' . get_bloginfo("wpurl") . '/?tag=" + args[0];
+	        window.location.href = redirectUrl;
+                
+		// Old behaviour
+                // var parameters = {};
+		// parameters["entityId"] = args[0];
+        	// getMap().compute(parameters);
+        	
+	    }
+	    
+	    // Called when an attribute is selected (node = article here) 
+	    function Discover(args) {
+		var parameters = {};
+		parameters["attributeId"] = args[0];
+		parameters["analysisProfile"] = "DiscoveryProfile";
+        	getMap().compute(parameters);
+	    }
+            */
         </script>
        
           
-          <script type="text/javascript" src="' . plugins_url('swfobject.js', __FILE__) . '"></script>
+        <script type="text/javascript" src="' . plugins_url('swfobject.js', __FILE__) . '"></script>
           
           <script type="text/javascript">
               <!-- For version detection, set to min. required Flash Player version, or 0 (or 0.0.0), for no version detection. --> 
@@ -69,7 +84,6 @@ $options = get_option('wpsmap_options');
               var xiSwfUrlStr = "' . plugins_url('playerProductInstall.swf', __FILE__) . '"
               var flashvars = ' . json_encode($flashvars) . ';
               flashvars.wpsserverurl = "' . $options['server_url'] . '";
-              flashvars.wpsplanname = "' . $options['plan_name'] . '";
               var params = {};
               params.quality = "high";
               params.bgcolor = "#FFFFFF";
@@ -146,15 +160,39 @@ function the_map($width, $height, $flashvars) {
  * @return string a link to the map section of a post
  */
 function map_link() {
-    return '<p>&#0187;<a href="' . get_permalink() . '#map">Afficher la carte à partir de cet article</a></p>';
+    return '<div class="entry-map"><p>&#0187;<a href="' . get_permalink() . '#map">Afficher la carte à partir de cet article</a></p></div>';
 }
 
 /**
  * Shortcut to display the result of the map_link function above
  */
 function the_map_link() {
+    echo "<!-- the map link start -->";
     if('post' == get_post_type(get_the_ID())) {
         echo map_link();
     }
+}
+
+/**
+ * Shortcut to add the "db" map javascript handler functions 
+ */
+function db_map_js($redirect_rel_url) {
+	return '
+	    <script type="text/javascript">
+            /* Called when an entity is selected (link = a tag here) */
+	    function NewWin(args) {
+	        var redirectUrl = "' . get_bloginfo("wpurl") . $redirect_rel_url . '" + args[0];
+	        window.location.href = redirectUrl;
+	    }
+	    
+	    /* Called when an attribute is selected (node = article here) */
+	    function Discover(args) {
+		var parameters = {};
+		parameters["attributeId"] = args[0];
+		parameters["analysisProfile"] = "DiscoveryProfile";
+        	getMap().compute(parameters);
+	    }
+            </script>
+	';
 }
 ?>

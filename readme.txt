@@ -7,6 +7,9 @@ Stable tag: trunk
 
 Wpsmap plugin displays a map on wordpress pages, linking posts by their common tags.  
 
+== Description ==
+
+
 == Installation ==
 
 1. Put wpsmap directory into [wordpress_dir]/wp-content/plugins/

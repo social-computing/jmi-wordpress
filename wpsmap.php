@@ -3,7 +3,7 @@
   Plugin Name: WPS Map
   Plugin URI:  http://www.social-computing.com/
   Description: A Map plugin querying WPS server for Wordpress 3.0 or above displaying relationships between posts and tags or categories.
-  Version:     0.2
+  Version:     0.4
   Author:      Jonathan Dray
   Author URI:  http://www.social-computing.com/
   Copyright:   Copyright (c) 2011 Social Computing 
@@ -79,8 +79,10 @@ function wpsmap_delete_plugin_options() {
 
 /**
  * Display a Settings link on the main Plugins page
+ *
  * @param array $links
  * @param string $file
+ *
  * @return an array of links
  */
 function wpsmap_plugin_action_links($links, $file) {
@@ -99,7 +101,9 @@ add_filter('plugin_action_links', 'wpsmap_plugin_action_links', 10, 2);
 
 /**
  * Add the map to the post content
+ *
  * @param string $post_content the original post content
+ *
  * @return the post content with map included
  */
 function post_display($post_content) {
@@ -116,6 +120,7 @@ function post_display($post_content) {
         global $wp_query;
         $thePostID = $wp_query->post->ID;
         $the_post .= '<div><h2 id="map">Articles connexes</h2>';
+        $the_post .= db_map_js('/?tag=');
         $the_post .= map($width, $height,  array('analysisProfile' => 'DiscoveryProfile', 'attributeId' => $wp_query->post->ID));
         $the_post .= '</div>';
     }
@@ -125,4 +130,53 @@ function post_display($post_content) {
 // the_content action hook called to modify a post content to add a map 
 // Calls the function above 'post_display'
 add_action('the_content', 'post_display'); 
+
+
+// ------------------------------------------------------------------------
+// UTILITY FUNCTIONS :                                                     
+// ------------------------------------------------------------------------
+
+/*
+ * Filters the selected facets to match the given type
+ *
+ * @param $facets an array of selected facets
+ * @param $type a facet type (could be tags, categories, authors...)
+ * 
+ * @return an array of selected facets matching the given type
+ */
+function getSelectedFacets($facets, $type) {
+	$selectedTags = array();
+	if ($facets) {
+		foreach ($facets as $selectedfacet) {
+		$splititm = split(':', $selectedfacet["name"], 2);
+                	if($splititm[0] == $type) {
+				$selectedTags[$splititm[1]] = html_entity_decode($selectedfacet['removelink']);
+                        }
+                }
+        }
+	return $selectedTags;
+}
+
+/*
+ * Get all the available facets for a given type
+ * 
+ * @param $facets array of all facets as returned by the solr results object 
+ * @param $type a facet type (ie tags, categories, authors, ...)
+ * 
+ * @return an array of facets available for one type and one query
+ */
+function getAvailableFacets($facets, $type) {
+	$availableFacets = array();
+	if ($facets) {
+		foreach ($facets as $facet) {
+			if($facet['name'] == $type) {
+				foreach ($facet['items'] as $item) {
+					$availableFacets[$item['name']] = html_entity_decode($item['link']);
+				}
+				// return $facet['items'];
+			}
+		}
+	}
+	return $availableFacets;	
+}
 ?>

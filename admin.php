@@ -72,6 +72,12 @@ function wpsmap_render_form() {
 					</td>
 				</tr>
 				<tr>
+					<th scope="row">Search plan name</th>
+					<td>
+						<input type="text" size="50" name="wpsmap_options[search_plan_name]" value="<?php echo $options['search_plan_name']; ?>" />
+					</td>
+				</tr>
+				<tr>
 					<th scope="row">Width</th>
 					<td>
 						<input type="text" size="4" name="wpsmap_options[width]" value="<?php echo $options['width']; ?>" />
