@@ -1,3 +1,16 @@
-Compléter le fichier README.txt
-Documenter la procédure d'installation
-Faire une documentation avec les fonctions accessibles pour le thème.
+
+ * Ne plus inclure le client flex dans le plugin php 
+   Documenter comment l'inclure à la place
+
+ * Revoir l'utilisation du nom de plan dans la configuration et dans les
+   templates
+
+ * Ajout d'une section documentation
+   Compléter le fichier README.txt
+   En particulier les modifications à faire pour le plugin solr
+   Documenter la procédure d'installation
+   Faire une documentation avec les fonctions accessibles pour le thème.
+ 
+ * Ajout d'un changelog
+
+ * Mise à jour de la version en fonction des tags mercurial
