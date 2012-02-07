@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<!DOCTYPE swatch SYSTEM "swatch.dtd">
+
+<swatch name="WORDPRESS_LINK_CUR_REF">
+    <!-- Base Satellite definition -->
+    <sat shape="edgeShp" hover="hoverEvt" click="clickEvt" isBack="true">
+        <slice inCol="238 242 255" outCol="239 242 245"/>
+    </sat>
+
+    <sat shape="edgeShp" selection="search">
+        <slice inCol="255 255 255" outCol="255 0 0"/>
+    </sat>
+
+    <!-- References -->
+    <font id="tipFnt" name="Helvetica" size="12"/>
+    <font id="fixedFnt" name="Monospaced" size="12"/>
+
+    <shape id="edgeShp" scale="1" anchor="intersect"/>
+
+    <tooltip id="tooltip" delay="0" length="3000">
+        <tip font="tipFnt" label="[/20sREC_NAME]" inCol="255 255 255" outCol="179 217 255" 
+             textCol="34 34 34" rounded="10" align="center" isFloating="true"/>
+    </tooltip>
+
+    <!-- Hover event -->
+    <event id="hoverEvt">
+        <show status="Cliquez pour afficher le menu du lien"/>
+        <pop tooltip="tooltip"/>
+    </event>
+
+    <!-- Click event -->
+    <event id="clickEvt">
+        <popup menu="menu"/>
+    </event>
+    
+    <menu id="menu" font="menuFnt">
+        <menu id="submenu" label="[sREC_NAME]" font="menuFnt">
+            <item label="Afficher" url="javascript:DisplayLink([sREC_ID], [sREC_SLUG], [sREC_NAME])" />
+            <item label="Center sur la carte" url="javascript:DiscoverLink([sREC_ID], [sREC_NAME])" />
+        </menu>
+    </menu>
+    
+    <font id="menuFnt" name="Monospaced" size="11"/>
+</swatch>
