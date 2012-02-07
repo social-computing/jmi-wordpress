@@ -1,0 +1,10 @@
+# TODO 
+
+ * Mise à jour du fichier readme.txt en vue de la publication du plugin sur
+   wordpress.org : licence en particulier
+ * Inclusion du javascript et du css à l'aide des fonctions adaptées pour les
+   plugins wordpress.
+ * Localisation des textes
+ * Modifier les commentaires dans le code pour être valides pour phpDocumentor : http://www.phpdoc.org/ 
+ * Ajout d'un changelog
+ * Mise à jour de la version en fonction des tags mercurial
