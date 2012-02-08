@@ -2,6 +2,10 @@ syntax: glob
 
 *~
 .DS_Store
+.settings
+.classpath
+.project
+target
 
 
 syntax: regexp
