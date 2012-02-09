@@ -33,12 +33,17 @@ import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
 
 @Path("/sites")
 public class SiteService {
-    private static final Logger LOG = LoggerFactory.getLogger(SiteService.class);    
-    private static final PropertiesConfiguration CONFIG;
+    private static final Logger LOG = LoggerFactory.getLogger(SiteService.class);
+    private static final int DEFAULT_QUOTA = 25;
+    
+    //private static final PropertiesConfiguration CONFIG;
     
     /*
      *  Reading configuration file, only once and not for each Site service initialization 
      */
+    
+    // Disable for now, not insterting for cloudbees, replace with a db entry
+    /* 
     static {
     	try {
 			CONFIG = new PropertiesConfiguration("wordpress-web.properties");
@@ -51,9 +56,9 @@ public class SiteService {
 			throw new RuntimeException(e);
 		}
     }
+    */
 
     // If the default quota property is not set, default daily value is set to 300
-    private int defaultQuota = 300;
     private SiteInfoDao siteInfoDao = new SiteInfoDaoHibernate();
     private SiteDailyDao siteDailyDao = new SiteDailyDaoHibernate();
     
@@ -79,13 +84,14 @@ public class SiteService {
             	
         	// Checking quota information
             if(siteDaily != null) {
-            	int quota = (siteInfo.getQuota() == -1) ? CONFIG.getInt("defaultQuota", this.defaultQuota) : siteInfo.getQuota();
+            	// int quota = (siteInfo.getQuota() == -1) ? CONFIG.getInt("defaultQuota", this.defaultQuota) : siteInfo.getQuota();
+            	int quota = (siteInfo.getQuota() == -1) ? DEFAULT_QUOTA : siteInfo.getQuota();
             	if(quota != 0) {
             		if(siteDaily.getCount() >= quota) {
             			// Quota Exceeded send appropriate error
-            			LOG.error("Quota exceeded, authoized: {}, current: {}", quota, siteDaily.getCount());
-            			
-            			// TODO : return the appropriate error message for the rest connector
+            			LOG.info("Quota exceeded for url: {}, today count value: {}", url, siteDaily.getCount());
+            			SiteServiceError error = new SiteServiceError(01, "Quota exceeded");
+            			return Response.ok(error.toJson()).build();
             		}
             	}
             }
@@ -100,9 +106,9 @@ public class SiteService {
         	}
         	ClientResponse response = webResource.accept("application/json").get(ClientResponse.class);
     		if (response.getStatus() != Response.Status.OK.getStatusCode()) {
+    			   // TODO send an error instead of this runtime exception
     			   throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
     		}
-    		
     		output = response.getEntity(String.class);
     		LOG.debug("response from remote service: {}", output);
     		
@@ -124,6 +130,8 @@ public class SiteService {
             	siteDaily.incrementUpdate();
             	this.siteDailyDao.update(siteDaily);
             }
+            
+            // Send response with the read data from the remote JSON service
             return Response.ok(output).build();
         }
         catch (Exception e) {
