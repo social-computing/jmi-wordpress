@@ -1,7 +1,8 @@
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 
-import com.socialcomputing.wordpress.persistence.Site;
+import com.socialcomputing.wordpress.persistence.model.SiteDaily;
+import com.socialcomputing.wordpress.persistence.model.SiteInfo;
 
 /**
  * 
@@ -15,7 +16,8 @@ public class SiteTest {
 
 	public static void main(String[] args) {
 		AnnotationConfiguration config = new AnnotationConfiguration();
-		config.addAnnotatedClass(Site.class);
+		config.addAnnotatedClass(SiteDaily.class);
+		config.addAnnotatedClass(SiteInfo.class);
 		config.configure("hibernate.cfg.xml");
 		new SchemaExport(config).create(true, true);
 	}

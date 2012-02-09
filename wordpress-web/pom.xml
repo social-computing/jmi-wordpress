@@ -116,17 +116,25 @@
         </dependency>
 
         <dependency>
+            <groupId>commons-configuration</groupId>
+            <artifactId>commons-configuration</artifactId>
+            <version>1.8</version>
+        </dependency>
+
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>3.8.1</version>
             <scope>test</scope>
         </dependency>
 
-        <!-- <dependency> 
+        <!--  
+        <dependency> 
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId> 
             <version>5.1.18</version>
-        </dependency> -->
+        </dependency>
+        -->
 
         <!-- Compilation only dependencies -->
         <dependency>
