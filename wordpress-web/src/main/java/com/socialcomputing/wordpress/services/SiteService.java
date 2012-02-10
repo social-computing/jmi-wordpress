@@ -10,10 +10,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.commons.configuration.reloading.FileChangedReloadingStrategy;
-import org.hibernate.Session;
 import org.joda.time.DateMidnight;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +20,6 @@ import com.socialcomputing.wordpress.persistence.dao.hibernate.SiteDailyDaoHiber
 import com.socialcomputing.wordpress.persistence.dao.hibernate.SiteInfoDaoHibernate;
 import com.socialcomputing.wordpress.persistence.model.SiteDaily;
 import com.socialcomputing.wordpress.persistence.model.SiteInfo;
-import com.socialcomputing.wordpress.utils.HibernateUtil;
 import com.socialcomputing.wordpress.utils.URLUtil;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -71,16 +66,16 @@ public class SiteService {
         try {
         	DateMidnight today = new DateMidnight();
         	LOG.debug("day of the call: {}", today.toString());
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
             LOG.debug("received url: {}", url);
             String output = "";
             
         	// Getting site information and nb of calls already done from db
-            String domainURL = URLUtil.getDomain(url);
+            // String domainURL = URLUtil.getDomain(url);
+            String normalizedURL = URLUtil.normalizeUrl(url);
             Date todayDate = today.toDate();
-            LOG.debug("url to call: {}, domain part: {}", url, domainURL);
-        	SiteInfo siteInfo = this.siteInfoDao.findByDomain(domainURL);
-            SiteDaily siteDaily = this.siteDailyDao.findByDomainAndDay(domainURL, todayDate);
+            LOG.debug("url to call: {}, normalized url: {}", url, normalizedURL);
+        	SiteInfo siteInfo = this.siteInfoDao.findByDomain(normalizedURL);
+            SiteDaily siteDaily = this.siteDailyDao.findByDomainAndDay(normalizedURL, todayDate);
             	
         	// Checking quota information
             if(siteDaily != null) {
@@ -114,7 +109,7 @@ public class SiteService {
     		
     		// only update the database if data has been successfully read          
             if(siteInfo == null) {
-            	siteInfo = new SiteInfo(domainURL, url);
+            	siteInfo = new SiteInfo(normalizedURL, url);
             	this.siteInfoDao.create(siteInfo);
             }
             else {
@@ -123,7 +118,7 @@ public class SiteService {
             }
             
             if(siteDaily == null) {
-            	siteDaily = new SiteDaily(domainURL, todayDate);
+            	siteDaily = new SiteDaily(normalizedURL, todayDate);
             	this.siteDailyDao.create(siteDaily);
             }
             else {
