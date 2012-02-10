@@ -15,5 +15,5 @@ public interface SiteInfoDao {
     
     void create(SiteInfo siteInfo);
     
-    SiteInfo findByDomain(String domain);
+    SiteInfo findByURL(String url);
 }

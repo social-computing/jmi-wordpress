@@ -11,7 +11,7 @@ public class SiteInfo {
 	
 	@Id
     @Column(columnDefinition = "varchar(255)")
-    private String domain;
+    private String url;
 	private String latesturl;
     private Date created;
     private Date updated;
@@ -19,20 +19,20 @@ public class SiteInfo {
     
     // default constructor
     public SiteInfo() {
-    	this.domain = null;
+    	this.url = null;
     	this.latesturl = null;
     }
     
     /**
      * Constructor with url and domain of the site 
      * 
-     * @param domain  the domain part of the service to call
-     * @param url     the complete url of the service to call
+     * @param url           the service base url to call
+     * @param latesturl     the complete url of the service to call
      */
-    public SiteInfo(String domain, String url) {
+    public SiteInfo(String url, String latesturl) {
         super();
-        this.domain = domain;
-        this.latesturl = url;
+        this.url = url;
+        this.latesturl = latesturl;
         this.created = new Date();
         this.updated = new Date();
         this.quota = -1;

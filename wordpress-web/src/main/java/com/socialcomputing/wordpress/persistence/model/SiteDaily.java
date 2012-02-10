@@ -12,7 +12,7 @@ import org.hibernate.annotations.Index;
 public class SiteDaily {
 	@Id
     @Column(columnDefinition = "varchar(255)")
-    private String domain;
+    private String url;
 
 	private Date day;
 	
@@ -22,19 +22,19 @@ public class SiteDaily {
 
     // default constructor
     public SiteDaily() {
-    	this.domain = null;
+    	this.url = null;
     	this.count = 1;
     }
     
     /**
      * Constructor with site access information
      * 
-     * @param domain   
+     * @param url   
      * @param day
      */
-    public SiteDaily(String domain, Date day) {
+    public SiteDaily(String url, Date day) {
         super();
-        this.domain = domain;
+        this.url = url;
         this.day = day;
         this.count = 1;
     }

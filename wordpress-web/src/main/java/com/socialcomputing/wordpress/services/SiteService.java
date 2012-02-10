@@ -13,6 +13,7 @@ import javax.ws.rs.core.Response;
 import org.joda.time.DateMidnight;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 import com.socialcomputing.wordpress.persistence.dao.SiteDailyDao;
 import com.socialcomputing.wordpress.persistence.dao.SiteInfoDao;
@@ -21,6 +22,7 @@ import com.socialcomputing.wordpress.persistence.dao.hibernate.SiteInfoDaoHibern
 import com.socialcomputing.wordpress.persistence.model.SiteDaily;
 import com.socialcomputing.wordpress.persistence.model.SiteInfo;
 import com.socialcomputing.wordpress.utils.URLUtil;
+import com.socialcomputing.wordpress.utils.log.DiagnosticContext;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
@@ -31,28 +33,6 @@ public class SiteService {
     private static final Logger LOG = LoggerFactory.getLogger(SiteService.class);
     private static final int DEFAULT_QUOTA = 25;
     
-    //private static final PropertiesConfiguration CONFIG;
-    
-    /*
-     *  Reading configuration file, only once and not for each Site service initialization 
-     */
-    
-    // Disable for now, not insterting for cloudbees, replace with a db entry
-    /* 
-    static {
-    	try {
-			CONFIG = new PropertiesConfiguration("wordpress-web.properties");
-			FileChangedReloadingStrategy reloadingStrategy = new FileChangedReloadingStrategy();
-	    	reloadingStrategy.setRefreshDelay(60000);
-	    	CONFIG.setReloadingStrategy(reloadingStrategy);
-		} 
-    	catch (ConfigurationException e) {
-    		LOG.error(e.getMessage(), e);
-			throw new RuntimeException(e);
-		}
-    }
-    */
-
     // If the default quota property is not set, default daily value is set to 300
     private SiteInfoDao siteInfoDao = new SiteInfoDaoHibernate();
     private SiteDailyDao siteDailyDao = new SiteDailyDaoHibernate();
@@ -64,6 +44,7 @@ public class SiteService {
     public Response record(@QueryParam("url") String url, 
     		               @QueryParam("login") String login, @QueryParam("password") String password) {
         try {
+        	MDC.put(DiagnosticContext.ENTRY_POINT_CTX.name, "GET /sites/site.json?url=" + url);
         	DateMidnight today = new DateMidnight();
         	LOG.debug("day of the call: {}", today.toString());
             LOG.debug("received url: {}", url);
@@ -74,8 +55,8 @@ public class SiteService {
             String normalizedURL = URLUtil.normalizeUrl(url);
             Date todayDate = today.toDate();
             LOG.debug("url to call: {}, normalized url: {}", url, normalizedURL);
-        	SiteInfo siteInfo = this.siteInfoDao.findByDomain(normalizedURL);
-            SiteDaily siteDaily = this.siteDailyDao.findByDomainAndDay(normalizedURL, todayDate);
+        	SiteInfo siteInfo = this.siteInfoDao.findByURL(normalizedURL);
+            SiteDaily siteDaily = this.siteDailyDao.findByURLAndDay(normalizedURL, todayDate);
             	
         	// Checking quota information
             if(siteDaily != null) {
@@ -132,6 +113,9 @@ public class SiteService {
         catch (Exception e) {
             LOG.error(e.getMessage(), e);
             return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
+        }
+        finally{
+        	MDC.remove(DiagnosticContext.ENTRY_POINT_CTX.name);
         }
     }
 }

@@ -12,7 +12,12 @@
         diskPersistent="false"
         diskExpiryThreadIntervalSeconds="120"/>
     <cache
-        name="com.socialcomputing.wordpress.persistence.Site"
+        name="com.socialcomputing.wordpress.persistence.model.SiteInfo"
+        maxElementsInMemory="500"
+        eternal="false"
+        overflowToDisk="false" />
+    <cache
+        name="com.socialcomputing.wordpress.persistence.model.SiteDaily"
         maxElementsInMemory="500"
         eternal="false"
         overflowToDisk="false" />

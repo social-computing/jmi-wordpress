@@ -38,18 +38,18 @@ public class SiteDailyDaoHibernate implements SiteDailyDao {
 	/* (non-Javadoc)
 	 * @see com.socialcomputing.wordpress.persistence.dao.SiteDailyDao#findByDomain(java.lang.String)
 	 */
-	public SiteDaily findByDomain(String domain) {
+	public SiteDaily findByURL(String url) {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		return (SiteDaily) session.get(SiteDaily.class, domain);
+		return (SiteDaily) session.get(SiteDaily.class, url);
 	}
 
 	/* (non-Javadoc)
 	 * @see com.socialcomputing.wordpress.persistence.dao.SiteDailyDao#findByDomainAndDay(java.lang.String, java.util.Date)
 	 */
-	public SiteDaily findByDomainAndDay(String domain, Date day) {
+	public SiteDaily findByURLAndDay(String url, Date day) {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		Query query = session.createQuery("FROM SiteDaily WHERE domain = :domain AND day = :day");
-		query.setString("domain", domain);
+		Query query = session.createQuery("FROM SiteDaily WHERE url = :url AND day = :day");
+		query.setString("url", url);
 		query.setDate("day", day);
 		List<SiteDaily> results = query.list();
 		if(results == null || results.size() == 0) return null;

@@ -17,15 +17,11 @@
         </encoder>
     </appender>
 
-
     <!-- Embedded frameworks & tools -->
-    <logger name="org.apache.commons" level="warn" />
-    <logger name="org.hibernate" level="warn" />
-    <logger name="net.sf.ehcache" level="info" />
-
+    <logger name="com.socialcomputing" level="debug" />
 
     <!-- Root logger -->
-    <root level="debug">
+    <root level="warn">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE"/>
     </root>

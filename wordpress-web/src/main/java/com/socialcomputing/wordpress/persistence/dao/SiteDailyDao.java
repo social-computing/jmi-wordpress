@@ -17,7 +17,7 @@ public interface SiteDailyDao {
     
     void create(SiteDaily siteDaily);
     
-    SiteDaily findByDomain(String domain);
+    SiteDaily findByURL(String url);
     
-    SiteDaily findByDomainAndDay(String domain, Date day);
+    SiteDaily findByURLAndDay(String url, Date day);
 }
