@@ -3,7 +3,7 @@
  */
 package com.socialcomputing.wordpress.persistence.dao;
 
-import java.util.Date;
+import org.joda.time.DateTime;
 
 import com.socialcomputing.wordpress.persistence.model.SiteDaily;
 
@@ -19,5 +19,5 @@ public interface SiteDailyDao {
     
     SiteDaily findByURL(String url);
     
-    SiteDaily findByURLAndDay(String url, Date day);
+    SiteDaily findByURLAndDay(String url, DateTime day);
 }

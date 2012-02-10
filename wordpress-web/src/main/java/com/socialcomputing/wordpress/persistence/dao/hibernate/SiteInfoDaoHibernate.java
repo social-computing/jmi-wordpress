@@ -3,6 +3,9 @@
  */
 package com.socialcomputing.wordpress.persistence.dao.hibernate;
 
+import java.util.Collection;
+
+import org.hibernate.Query;
 import org.hibernate.Session;
 
 import com.socialcomputing.wordpress.persistence.dao.SiteInfoDao;
@@ -37,5 +40,14 @@ public class SiteInfoDaoHibernate implements SiteInfoDao {
 	public SiteInfo findByURL(String url) {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		return (SiteInfo) session.get(SiteInfo.class, url);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.socialcomputing.wordpress.persistence.dao.SiteInfoDao#getLatest()
+	 */
+	public Collection<SiteInfo> getLatest() {
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		Query query = session.createQuery("FROM SiteInfo ORDER BY updated DESC LIMIT 10");
+		return query.list();
 	}
 }

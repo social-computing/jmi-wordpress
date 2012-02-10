@@ -1,6 +1,9 @@
 package com.socialcomputing.wordpress.services;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
@@ -11,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.joda.time.DateMidnight;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -45,7 +49,7 @@ public class SiteService {
     		               @QueryParam("login") String login, @QueryParam("password") String password) {
         try {
         	MDC.put(DiagnosticContext.ENTRY_POINT_CTX.name, "GET /sites/site.json?url=" + url);
-        	DateMidnight today = new DateMidnight();
+        	DateTime today = new DateMidnight().toDateTime();
         	LOG.debug("day of the call: {}", today.toString());
             LOG.debug("received url: {}", url);
             String output = "";
@@ -53,10 +57,9 @@ public class SiteService {
         	// Getting site information and nb of calls already done from db
             // String domainURL = URLUtil.getDomain(url);
             String normalizedURL = URLUtil.normalizeUrl(url);
-            Date todayDate = today.toDate();
-            LOG.debug("url to call: {}, normalized url: {}", url, normalizedURL);
+            LOG.debug("normalized url: {}", normalizedURL);
         	SiteInfo siteInfo = this.siteInfoDao.findByURL(normalizedURL);
-            SiteDaily siteDaily = this.siteDailyDao.findByURLAndDay(normalizedURL, todayDate);
+            SiteDaily siteDaily = this.siteDailyDao.findByURLAndDay(normalizedURL, today);
             	
         	// Checking quota information
             if(siteDaily != null) {
@@ -99,7 +102,7 @@ public class SiteService {
             }
             
             if(siteDaily == null) {
-            	siteDaily = new SiteDaily(normalizedURL, todayDate);
+            	siteDaily = new SiteDaily(normalizedURL, today);
             	this.siteDailyDao.create(siteDaily);
             }
             else {
@@ -113,6 +116,33 @@ public class SiteService {
         catch (Exception e) {
             LOG.error(e.getMessage(), e);
             return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
+        }
+        finally{
+        	MDC.remove(DiagnosticContext.ENTRY_POINT_CTX.name);
+        }
+    }
+    
+
+    @GET
+    @Path("top.json")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Site> top() {
+        try {
+        	MDC.put(DiagnosticContext.ENTRY_POINT_CTX.name, "GET /sites/top.json");
+        	DateTime today = new DateMidnight().toDateTime();
+        	Collection<SiteInfo> latestSites = this.siteInfoDao.getLatest();
+        	List<Site> sites = new ArrayList<Site>();
+        	for(SiteInfo siteInfo : latestSites) {
+        		SiteDaily siteDaily = this.siteDailyDao.findByURLAndDay(siteInfo.getUrl(), today);
+        		int count = (siteDaily != null) ? siteDaily.getCount() : 0;
+        		sites.add(new Site(siteInfo.getUrl(), 
+        						   siteInfo.getLatestUrl(),
+        						   siteInfo.getCreated(),
+        						   siteInfo.getUpdated(),
+        						   siteInfo.getQuota(),
+        						   count));
+        	}
+        	return sites;
         }
         finally{
         	MDC.remove(DiagnosticContext.ENTRY_POINT_CTX.name);

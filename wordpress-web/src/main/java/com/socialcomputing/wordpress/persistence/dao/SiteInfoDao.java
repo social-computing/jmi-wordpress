@@ -3,6 +3,8 @@
  */
 package com.socialcomputing.wordpress.persistence.dao;
 
+import java.util.Collection;
+
 import com.socialcomputing.wordpress.persistence.model.SiteInfo;
 
 /**
@@ -16,4 +18,6 @@ public interface SiteInfoDao {
     void create(SiteInfo siteInfo);
     
     SiteInfo findByURL(String url);
+    
+    Collection<SiteInfo> getLatest();
 }
