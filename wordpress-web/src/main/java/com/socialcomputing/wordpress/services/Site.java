@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.socialcomputing.wordpress.services;
 
 import javax.persistence.Entity;
@@ -49,7 +46,6 @@ public class Site {
 		this.updated = updated;
 		this.count = count;
 		
-		// TODO: change this to a quota enum later
 		switch(quota) {
 			case QUOTA_UNDEFINED:
 				this.quota = "undefined";
