@@ -89,18 +89,18 @@
 		<popup menu="menu"/>
 	</event>
     <menu id="menu" font="menuFnt">
-        <item label="Afficher" font="nameFnt" url="javascript:DisplayNode({sID}, {sSLUG}, {sTITLE})" />
-        <item label="Centrer" font="nameFnt"  url="javascript:DiscoverNode({sID}, {sSLUG}, {sTITLE})" />
+        <item label="Afficher" font="nameFnt" url="javascript:DisplayNode({sID},{sSLUG},{sTITLE})" />
+        <item label="Centrer sur la carte" font="nameFnt"  url="javascript:DiscoverNode({sID},{sSLUG},{sTITLE})" />
         <separator />
         <menu id="submenu" label="[+80sPOSS_NAME]" font="menuFnt">
-            <item label="Afficher" url="javascript:DisplayLink([sPOSS_ID], [sPOSS_NAME])" />
-            <item label="Center sur la carte" url="javascript:DiscoverLink([sPOSS_ID], [sPOSS_NAME])" />
+            <item label="Afficher" url="javascript:DisplayLink([sPOSS_ID],[sPOSS_NAME])" />
+            <item label="Center sur la carte" url="javascript:DiscoverLink([sPOSS_ID],[sPOSS_NAME])" />
         </menu>
     </menu>
     <font id="menuFnt" name="Monospaced" size="11"/>
 
     <!-- DblClkEvt event -->
     <event id="dblClkEvt">
-        <open url="javascript:DisplayNode({sID}, {sSLUG}, {sTITLE})" />
+        <open url="javascript:DisplayNode({sID},{sSLUG},{sTITLE})" />
     </event>
 </swatch>

@@ -6,20 +6,21 @@
 	
     <!-- entities definitions (links) -->
     <entities>
-        <REST-entities name="Wordpress Rest" type="json" invert="false">
+        <REST-entities name="Wordpress Rest" type="json" invert="{$invert}">
             <URL-connection type="GET">
-                <url>{$wordpressurl}</url>
-                <!--<basic-authentication username="{$xwikilogin}" password="{$xwikipassword}" /> -->
+                <url>http://wordpress.wps.cloudbees.net/rest/sites/site.json</url>
                 <url-parameter name="media">json</url-parameter>
-            </URL-connection>	
+                <url-parameter name="url">{$wordpressurl}</url-parameter>
+            </URL-connection>            
             <REST-entity markup="posts" id="id">
-                <REST-property id="title" />                
+                <REST-property id="title" />
                 <REST-property id="slug" />
+                <REST-property id="url" />
                 <REST-property id="poss_id" attribute="id" />
                 <REST-property id="poss_name" attribute="title" />
             </REST-entity>
             <REST-attribute markup="tags" id="id">
-                <REST-property id="title" /> 
+                <REST-property id="title" />
                 <REST-property id="slug" />
                 <REST-property id="poss_id" entity="id" />
                 <REST-property id="poss_name" entity="title" />
@@ -28,14 +29,14 @@
     </entities>
 	
     <env-property name="$web_context" value="/wps" />
-	
-	<affinity-reader-profile name="AffReader" affinity-reader-ref="JDBC_AffReader" threshold="100" />
-	<affinity-reader-profile name="DiscoveryAffReader" affinity-reader-ref="JDBC_DiscoveryAffReader" threshold="100" />
-	<affinity-reader-profile name="GlobalAffReader" affinity-reader-ref="JDBC_GlobalAffReader" threshold="100" />
 
-	<analysis-profile name="Profile" attributes-ref="JDBC_Profile" type="personal" attribute-size="frequency" attributes-max="40" attributes-base-max="60" cluster="yes" cluster-level="100" cluster-threshold="15" cluster-type="size" attributes-cluster-max="5" balanced-effect="0" entities-max="100" attr-link-threshold="10" links-attribute-threshold="3">
-		<props-mapping>
-			<entity-props-mapping>
+    <affinity-reader-profile name="AffReader" affinity-reader-ref="JDBC_AffReader" threshold="100" />
+    <affinity-reader-profile name="DiscoveryAffReader" affinity-reader-ref="JDBC_DiscoveryAffReader" threshold="100" />
+    <affinity-reader-profile name="GlobalAffReader" affinity-reader-ref="JDBC_GlobalAffReader" threshold="100" />
+
+    <analysis-profile name="Profile" attributes-ref="JDBC_Profile" type="personal" attribute-size="frequency" attributes-max="40" attributes-base-max="60" cluster="yes" cluster-level="100" cluster-threshold="15" cluster-type="size" attributes-cluster-max="5" balanced-effect="0" entities-max="100" attr-link-threshold="10" links-attribute-threshold="3">
+	    <props-mapping>
+		    <entity-props-mapping>
 				<mapping key="ID" value="id" />
 				<mapping key="TITLE" value="title" />
 				<mapping key="SLUG" value="slug" />
@@ -44,6 +45,7 @@
 				<mapping key="ID" value="id" />
 				<mapping key="TITLE" value="title" />
 				<mapping key="SLUG" value="slug" />
+				<mapping key="URL" value="url" />
 				<mapping key="POSS_ID" value="poss_id" />
 				<mapping key="POSS_NAME" value="poss_name" />
 			</attribute-props-mapping>
@@ -66,6 +68,7 @@
 				<mapping key="ID" value="id" />
 				<mapping key="TITLE" value="title" />
 				<mapping key="SLUG" value="slug" />
+				<mapping key="URL" value="url" />
 				<mapping key="POSS_ID" value="poss_id" />
 				<mapping key="POSS_NAME" value="poss_name" />
 			</attribute-props-mapping>
@@ -88,6 +91,7 @@
 				<mapping key="ID" value="id" />
 				<mapping key="TITLE" value="title" />
 				<mapping key="SLUG" value="slug" />
+				<mapping key="URL" value="url" />
 				<mapping key="POSS_ID" value="poss_id" />
 				<mapping key="POSS_NAME" value="poss_name" />
 			</attribute-props-mapping>

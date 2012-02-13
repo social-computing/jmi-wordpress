@@ -35,8 +35,8 @@
     
     <menu id="menu" font="menuFnt">
         <menu id="submenu" label="[sREC_NAME]" font="menuFnt">
-            <item label="Afficher" url="javascript:DisplayLink([sREC_ID], [sREC_SLUG], [sREC_NAME])" />
-            <item label="Center sur la carte" url="javascript:DiscoverLink([sREC_ID], [sREC_NAME])" />
+            <item label="Afficher" url="javascript:DisplayLink([sREC_ID],[sREC_SLUG],[sREC_NAME])" />
+            <item label="Center sur la carte" url="javascript:DiscoverLink([sREC_ID],[sREC_NAME])" />
         </menu>
     </menu>
     
