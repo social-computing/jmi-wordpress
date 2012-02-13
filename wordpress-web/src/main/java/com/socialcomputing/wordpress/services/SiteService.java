@@ -125,11 +125,11 @@ public class SiteService {
     
 
     @GET
-    @Path("top.json")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Path("top")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public List<Site> top(@DefaultValue("0") @QueryParam("start") int start, @DefaultValue("-1") @QueryParam("max") int max) {
         try {
-        	MDC.put(DiagnosticContext.ENTRY_POINT_CTX.name, "GET /sites/top.json");
+        	MDC.put(DiagnosticContext.ENTRY_POINT_CTX.name, "GET /sites/top");
         	DateTime today = new DateMidnight().toDateTime();
         	Collection<SiteInfo> latestSites = this.siteInfoDao.getLatest(start, max);
         	List<Site> sites = new ArrayList<Site>();

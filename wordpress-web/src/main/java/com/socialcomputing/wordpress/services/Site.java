@@ -65,4 +65,6 @@ public class Site {
 			int quota) {
 		this(url, latesturl, created, updated, quota, 0);
 	}
+	
+	public Site() {}
 }
