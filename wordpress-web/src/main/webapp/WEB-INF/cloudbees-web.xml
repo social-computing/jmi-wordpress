@@ -4,8 +4,8 @@
 	<appid>wps/wordpress</appid>
 
 	<resource name="jdbc/wordpress-db" auth="Container" type="javax.sql.DataSource">
-	 <param name="username" value="wordpress" />
-	 <param name="password" value="wordpress" />
+	 <param name="username" value="jmi-wordpress" />
+	 <param name="password" value="jmi-wordpress" />
 	 <param name="url" value="jdbc:cloudbees://wordpress-db" />
 	 
 	 <!-- Connection Pool settings -->
