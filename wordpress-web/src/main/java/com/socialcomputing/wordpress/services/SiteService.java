@@ -10,6 +10,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -126,11 +127,11 @@ public class SiteService {
     @GET
     @Path("top.json")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Site> top() {
+    public List<Site> top(@DefaultValue("0") @QueryParam("start") int start, @DefaultValue("-1") @QueryParam("max") int max) {
         try {
         	MDC.put(DiagnosticContext.ENTRY_POINT_CTX.name, "GET /sites/top.json");
         	DateTime today = new DateMidnight().toDateTime();
-        	Collection<SiteInfo> latestSites = this.siteInfoDao.getLatest();
+        	Collection<SiteInfo> latestSites = this.siteInfoDao.getLatest(start, max);
         	List<Site> sites = new ArrayList<Site>();
         	for(SiteInfo siteInfo : latestSites) {
         		SiteDaily siteDaily = this.siteDailyDao.findByURLAndDay(siteInfo.getUrl(), today);

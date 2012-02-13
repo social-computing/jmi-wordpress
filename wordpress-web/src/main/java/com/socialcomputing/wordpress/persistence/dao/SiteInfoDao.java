@@ -12,6 +12,7 @@ import com.socialcomputing.wordpress.persistence.model.SiteInfo;
  *
  */
 public interface SiteInfoDao {
+    static final int MAX_NB_RESULTS = 100;
 
     void update(SiteInfo siteInfo);
     
@@ -19,5 +20,5 @@ public interface SiteInfoDao {
     
     SiteInfo findByURL(String url);
     
-    Collection<SiteInfo> getLatest();
+    Collection<SiteInfo> getLatest(int start, int max);
 }

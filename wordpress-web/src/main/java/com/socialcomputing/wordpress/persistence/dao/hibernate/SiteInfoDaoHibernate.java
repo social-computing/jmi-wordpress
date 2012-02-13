@@ -45,9 +45,12 @@ public class SiteInfoDaoHibernate implements SiteInfoDao {
 	/* (non-Javadoc)
 	 * @see com.socialcomputing.wordpress.persistence.dao.SiteInfoDao#getLatest()
 	 */
-	public Collection<SiteInfo> getLatest() {
+	public Collection<SiteInfo> getLatest(int start, int max) {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		Query query = session.createQuery("FROM SiteInfo ORDER BY updated DESC LIMIT 10");
+		Query query = session.createQuery("FROM SiteInfo ORDER BY updated DESC");
+        query.setFirstResult(start);
+        max = (max == -1) ? SiteInfoDao.MAX_NB_RESULTS : Math.min(max, SiteInfoDao.MAX_NB_RESULTS);
+        query.setMaxResults(max);
 		return query.list();
 	}
 }
