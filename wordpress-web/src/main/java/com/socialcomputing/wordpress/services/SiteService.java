@@ -26,6 +26,7 @@ import com.socialcomputing.wordpress.persistence.dao.hibernate.SiteDailyDaoHiber
 import com.socialcomputing.wordpress.persistence.dao.hibernate.SiteInfoDaoHibernate;
 import com.socialcomputing.wordpress.persistence.model.SiteDaily;
 import com.socialcomputing.wordpress.persistence.model.SiteInfo;
+import com.socialcomputing.wordpress.utils.StringUtils;
 import com.socialcomputing.wordpress.utils.URLUtil;
 import com.socialcomputing.wordpress.utils.log.DiagnosticContext;
 import com.sun.jersey.api.client.Client;
@@ -51,8 +52,6 @@ public class SiteService {
         try {
         	MDC.put(DiagnosticContext.ENTRY_POINT_CTX.name, "GET /sites/site.json?url=" + url);
         	DateTime today = new DateMidnight().toDateTime();
-        	LOG.debug("day of the call: {}", today.toString());
-            LOG.debug("received url: {}", url);
             String output = "";
             
         	// Getting site information and nb of calls already done from db
@@ -81,7 +80,8 @@ public class SiteService {
         	WebResource webResource = client.resource(url);
         	
         	// if login and password are provided add authentication header
-        	if(login != null && password != null) {
+        	if(!StringUtils.isBlank(login) && !StringUtils.isBlank(password)) {
+        		LOG.debug("login and password provided, adding authentication header with login: {}", login);
         		client.addFilter(new HTTPBasicAuthFilter(login, password));
         	}
         	ClientResponse response = webResource.accept("application/json").get(ClientResponse.class);
@@ -90,7 +90,6 @@ public class SiteService {
     			   throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
     		}
     		output = response.getEntity(String.class);
-    		LOG.debug("response from remote service: {}", output);
     		
     		// only update the database if data has been successfully read          
             if(siteInfo == null) {
