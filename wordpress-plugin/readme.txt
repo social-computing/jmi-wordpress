@@ -36,7 +36,10 @@ enabled before trying to install this plugin.
 
  * Height and width: dimension of the map.
 
-By default the map is disabled, check the display map on posts options after
+ * Login and password: login info to provide to access the blog rest service if
+   the access is restricted (disable by default)
+
+By default the map is disabled, check the 'display map on posts' options after
 the global options have been set.
 
 = Map on a tag or a category archive page =
@@ -49,11 +52,15 @@ following snippets, in the following files in your template directory :
 <code>
     <?php if(function_exists('jmimap')) : ?>
     <?php
+        $tag_id = get_query_var('tag_id');
+        $options = get_option('jmi_options');
+        $wpurl = $options['wordpressurl'] . '/tag_posts?id=' . $tag_id;
         $map_options = array('width' => '650', 
                              'height' => '400',
                              'analysisProfile' => 'DiscoveryProfile', 
-                             'attributeId' => get_query_var('tag_id'), 
-                             'invert' => false);
+                             'attributeId' => $tag_id, 
+                             'invert' => false,
+                             'wordpressurl' => $wpurl);
         echo jmimap_js($map_options); 
         the_jmimap($map_options);
     ?>
@@ -65,11 +72,13 @@ following snippets, in the following files in your template directory :
 <code>
     <?php if(function_exists('jmimap')) : ?>
     <?php                
+        $options = get_option('jmi_options');
+        $wpurl = $options['wordpressurl'] . '/category_posts?id=' . get_query_var('cat');
         $map_options = array('width' => '650',
                              'height' => '400',
                              'analysisProfile' => 'GlobalProfile', 
                              'invert' => true, 
-                             'wordpressurl' => 'http://blog.maka/api/jmi/category_posts?id=' . get_query_var('cat'));
+                             'wordpressurl' => $wpurl);
         echo jmimap_js($map_options); 
         the_jmimap($map_options);
     ?>

@@ -32,6 +32,16 @@ function jmimap($opt) {
                 }
             }
             
+            function getById(id) {
+                if (navigator.appName.indexOf ("Microsoft") !=-1) {
+                    return window[id];
+                }
+                else {
+                    return document.getElementById(id);
+                }
+            }
+
+            
             function ready() {
         	    // do something here
             }
@@ -41,7 +51,7 @@ function jmimap($opt) {
             }
             
             function error(error) {
-        	    alert(error);
+                getById("status").innerHTML = "<h3>An error occured</h3>\n" + error;    
             }
 
             /* Actions that are defined in swatch configuration */
@@ -78,6 +88,7 @@ function jmimap($opt) {
              // JavaScript enabled so display the flashContent div in case it is not replaced with a swf object.
              swfobject.createCSS("#flashContent", "display:block;text-align:left;");
         </script>
+        <div id="status"></div>
         <div id="flashContent">
        	<p>
         	To view this page ensure that Adobe Flash Player version 
@@ -89,7 +100,6 @@ function jmimap($opt) {
 						   + pageHost + \"www.adobe.com/images/shared/download_buttons/get_flash_player.gif' alt='Get Adobe Flash player' /></a>\" ); 
 		</script> 
         </div>" . '
-        <div id="status"></div>
         <noscript>
             <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="100%" height="100%" id="jmi-flex">
                 <param name="movie" value="' . plugins_url('jmi-flex-1.0.swf', __FILE__) . '" />

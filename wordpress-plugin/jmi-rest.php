@@ -8,8 +8,37 @@ class JSON_API_JMI_Controller {
         global $json_api;
         
         // See also: http://codex.wordpress.org/Template_Tags/query_posts
-        $results = $json_api->introspector->get_posts();
+        $results = $json_api->introspector->get_posts(array('posts_per_page' => 50));
         return $this->getPostsAndTags($results);
+    }
+    
+    public function last_posts() {
+        global $json_api;
+        
+        $id = $json_api->query->get('id');
+        $max = $json_api->query->get('max');
+	$max = (!$max) ? 50 : $max; 
+
+        // Get post by id
+        if ($id) {
+	    $results = get_posts(array('p' => $id));
+            if(!$results) {
+                $json_api->error("Post not found.");
+            }
+            $post = new JSON_API_Post($results[0]);
+        } 
+
+        // Get the last ($max) posts
+	$posts = $json_api->introspector->get_posts(
+            array('posts_per_page' => $max,
+                  'post__not_in' => array($id)
+                 )
+        );
+        
+        // Add the current post to the list  
+	$posts[] = $post;
+
+        return $this->getPostsAndTags($posts);
     }
     
     public function category_posts() {
@@ -24,9 +53,57 @@ class JSON_API_JMI_Controller {
                 'cat' => $category->id
             )
         );
-
-        //return $this->posts_object_result($posts, $category);
         return $this->getPostsAndTags($results);
+    }
+   
+    public function tag_posts() {
+        global $json_api;
+        $tag = $json_api->introspector->get_current_tag();
+        if (!$tag) {
+            $json_api->error("Not found.");
+        }
+        $results = $json_api->introspector->get_posts(
+            array('tag' => $tag->slug)
+        );
+        return $this->getPostsAndTags($results);
+    }
+
+    /**
+     * Get posts that share the same tags as the given one.
+     */
+    public function related_posts() {
+        global $json_api;
+        $id = $json_api->query->get('id');
+
+        if ($id) {
+	    $results = get_posts(array('p' => $id));
+            if(!$results) {
+                $json_api->error("Post not found.");
+            }
+            $post = new JSON_API_Post($results[0]);
+        } 
+        else {
+            $json_api->error("Include 'id' var in your request.");
+        }
+	
+	// Get all tags from the current post
+        foreach($results[0]->tags as $tag) {
+	    $tags_id[] = $tag->term_id;
+	}
+
+        // Prepare query arguments and search posts containing the same tags
+        // as the current post
+        $posts = $json_api->introspector->get_posts(
+            array('tag__in' => $tags_id,
+                  'post__not_in' => array($id),
+                  'posts_per_page' => 50)
+	);
+        if(!$posts) $posts = array();
+
+	// Adding the current post to the list
+	$posts[] = $post;
+
+        return $this->getPostsAndTags($posts);
     }
 
 

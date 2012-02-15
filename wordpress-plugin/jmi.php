@@ -115,7 +115,13 @@ function post_display($post_content) {
 
     // Post map specific options
     global $wp_query;
-    $map_options = array('analysisProfile' => 'DiscoveryProfile', 'attributeId' => $wp_query->post->ID, 'invert' => true);
+    $post_id = $wp_query->post->ID;
+    $wpurl = $options['wordpressurl'] . '/last_posts?id=' . $post_id;
+
+    $map_options = array('analysisProfile' => 'DiscoveryProfile',
+                         'attributeId' => $post_id, 
+                         'invert' => true,
+                         'wordpressurl' => $wpurl);
     
     if (is_single() && $options['map_on_posts']) {
         $the_post .= '<div><h2 id="map">Articles connexes</h2>';
@@ -158,9 +164,9 @@ add_filter('json_api_jmi_controller_path', 'set_jmi_controller_path');
  *                given options
  */
 function getDefaultMapOptions($opt) {
-    $opt_list = array("wpsserverurl", "wpsplanname", "wordpressurl", "height", "width");
-    $options = array_intersect_key(get_option('jmi_options'), 
-                                   array_flip($opt_list));
+    $options = get_option('jmi_options');
+    $opt_list = array('wpsserverurl', 'wpsplanname', 'wordpressurl', 'height', 'width', 'login', 'password');
+    $options = array_intersect_key($options, array_flip($opt_list));
     return array_merge($options, $opt);
 }
 

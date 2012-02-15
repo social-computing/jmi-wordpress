@@ -99,6 +99,18 @@ function jmi_render_form() {
 						<input type="text" size="4" name="jmi_options[height]" value="<?php echo $options['height']; ?>" />
 					</td>
 				</tr>
+				<tr>
+					<th scope="row">Login</th>
+					<td>
+						<input type="text" size="15" name="jmi_options[login]" value="<?php echo $options['login']; ?>" />
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">Password</th>
+					<td>
+						<input type="password" name="jmi_options[password]" value="<?php echo $options['password']; ?>" autocomplete="off" />
+					</td>
+				</tr>
 
 				<tr><td colspan="2"><div style="margin-top:10px;"></div></td></tr>
 				<tr valign="top" style="border-top:#dddddd 1px solid;">
@@ -140,6 +152,8 @@ function jmi_validate_options($input) {
 	$input['wordpressurl'] =  wp_filter_nohtml_kses($input['wordpressurl']);
 	$input['width'] =  wp_filter_nohtml_kses($input['width']); 
 	$input['height'] =  wp_filter_nohtml_kses($input['height']);  
+	$input['login'] =  wp_filter_nohtml_kses($input['login']); 
+	$input['password'] =  wp_filter_nohtml_kses($input['password']);  
 	return $input;
 }
 ?>
