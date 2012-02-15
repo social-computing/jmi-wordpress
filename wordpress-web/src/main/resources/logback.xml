@@ -18,8 +18,11 @@
     </appender>
 
     <!-- Embedded frameworks & tools -->
+    <!-- Developpement settings
     <logger name="com.socialcomputing" level="debug" />
-
+    -->
+    <logger name="com.socialcomputing" level="warn" />
+    
     <!-- Root logger -->
     <root level="warn">
         <appender-ref ref="STDOUT"/>

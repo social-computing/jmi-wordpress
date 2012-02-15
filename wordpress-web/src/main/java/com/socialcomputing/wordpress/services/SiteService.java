@@ -37,7 +37,7 @@ import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
 @Path("/sites")
 public class SiteService {
     private static final Logger LOG = LoggerFactory.getLogger(SiteService.class);
-    private static final int DEFAULT_QUOTA = 25;
+    private static final int DEFAULT_QUOTA = 300;
     
     // If the default quota property is not set, default daily value is set to 300
     private SiteInfoDao siteInfoDao = new SiteInfoDaoHibernate();
