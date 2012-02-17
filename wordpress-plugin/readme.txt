@@ -7,7 +7,7 @@ Stable tag: 1.0
 
 == Description ==
 
-Just Map It! plugin display a map on wordpress pages, linking posts by their common tags.  
+Just Map It! Wordpress : this plugin enables the visualization of a Wordpress posts map. Posts are positioned in relation to the shared keywords. The map is a navigation tool : allowing you to center on any post and to discover related contents around this post. We applied this plugin to our News stream. Just try it!
 
 == Installation ==
 
