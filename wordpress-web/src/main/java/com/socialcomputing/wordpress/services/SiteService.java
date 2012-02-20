@@ -2,15 +2,16 @@ package com.socialcomputing.wordpress.services;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.DefaultValue;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -31,7 +32,6 @@ import com.socialcomputing.wordpress.utils.URLUtil;
 import com.socialcomputing.wordpress.utils.log.DiagnosticContext;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
 
 @Path("/sites")
@@ -47,8 +47,8 @@ public class SiteService {
     @GET
     @Path("site.json")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response record(@QueryParam("url") String url, 
-    		               @QueryParam("login") String login, @QueryParam("password") String password) {
+    public Response record(@HeaderParam(HttpHeaders.ACCEPT_ENCODING) String acceptEncoding,
+    		               @QueryParam("url") String url, @QueryParam("login") String login, @QueryParam("password") String password) {
         try {
         	MDC.put(DiagnosticContext.ENTRY_POINT_CTX.name, "GET /sites/site.json?url=" + url);
         	DateTime today = new DateMidnight().toDateTime();
@@ -75,20 +75,26 @@ public class SiteService {
             	}
             }
         	
-        	// if the url is provided, get the data from the remote url
+        	// If the url is provided, get the data from the remote url
         	Client client = Client.create();
-        	WebResource webResource = client.resource(url);
         	
         	// if login and password are provided add authentication header
         	if(!StringUtils.isBlank(login) && !StringUtils.isBlank(password)) {
         		LOG.debug("login and password provided, adding authentication header with login: {}", login);
         		client.addFilter(new HTTPBasicAuthFilter(login, password));
         	}
-        	ClientResponse response = webResource.accept("application/json").get(ClientResponse.class);
+
+        	LOG.debug("HTTP request Header {} = {}", HttpHeaders.ACCEPT_ENCODING, acceptEncoding);
+        	ClientResponse response = client.resource(url)
+        			                        .accept(MediaType.APPLICATION_JSON)
+        			                        .header(HttpHeaders.ACCEPT_ENCODING, acceptEncoding)
+        			                        .get(ClientResponse.class);
+        			
     		if (response.getStatus() != Response.Status.OK.getStatusCode()) {
     			   // TODO send an error instead of this runtime exception
     			   throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
     		}
+    		LOG.debug("HTTP response Header {} = {}", HttpHeaders.CONTENT_ENCODING, response.getHeaders());
     		output = response.getEntity(String.class);
     		
     		// only update the database if data has been successfully read          
