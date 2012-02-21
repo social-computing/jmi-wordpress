@@ -63,7 +63,6 @@ public class SiteService {
             	
         	// Checking quota information
             if(siteDaily != null) {
-            	// int quota = (siteInfo.getQuota() == -1) ? CONFIG.getInt("defaultQuota", this.defaultQuota) : siteInfo.getQuota();
             	int quota = (siteInfo.getQuota() == -1) ? DEFAULT_QUOTA : siteInfo.getQuota();
             	if(quota != 0) {
             		if(siteDaily.getCount() >= quota) {
@@ -84,7 +83,7 @@ public class SiteService {
         		client.addFilter(new HTTPBasicAuthFilter(login, password));
         	}
 
-        	LOG.debug("HTTP request Header {} = {}", HttpHeaders.ACCEPT_ENCODING, acceptEncoding);
+        	LOG.debug("HTTP request Header {}: {}", HttpHeaders.ACCEPT_ENCODING, acceptEncoding);
         	ClientResponse response = client.resource(url)
         			                        .accept(MediaType.APPLICATION_JSON)
         			                        .header(HttpHeaders.ACCEPT_ENCODING, acceptEncoding)
@@ -94,7 +93,7 @@ public class SiteService {
     			   // TODO send an error instead of this runtime exception
     			   throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
     		}
-    		LOG.debug("HTTP response Header {} = {}", HttpHeaders.CONTENT_ENCODING, response.getHeaders());
+    		LOG.debug("HTTP response Headers: {}", response.getHeaders());
     		output = response.getEntity(String.class);
     		
     		// only update the database if data has been successfully read          
