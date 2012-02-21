@@ -22,6 +22,7 @@
     <logger name="com.socialcomputing" level="debug" />
     -->
     <logger name="com.socialcomputing" level="warn" />
+    <logger name="com.socialcomputing.wordpress.web.filters" level="trace" />
     
     <!-- Root logger -->
     <root level="warn">

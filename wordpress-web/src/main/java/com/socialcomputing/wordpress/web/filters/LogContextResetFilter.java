@@ -10,6 +10,10 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
+import org.joda.time.DateTime;
+import org.joda.time.Period;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
 /**
@@ -41,6 +45,8 @@ import org.slf4j.MDC;
  */
 public final class LogContextResetFilter implements Filter {
     
+	public static final Logger LOG = LoggerFactory.getLogger(LogContextResetFilter.class);
+	
     //--------------------------------------------------------------------
     // Constructors
     //--------------------------------------------------------------------
@@ -98,8 +104,16 @@ public final class LogContextResetFilter implements Filter {
         // Reset MDC content.
         MDC.clear();
 
+        // Perf logging (Should be done with AOP but don't have time to it now)
+        DateTime before = new DateTime();
+        LOG.trace("Incoming request at: {}", before);
+        
         // And process request.
         chain.doFilter(request, response);
+        
+        DateTime after = new DateTime();
+        Period p = new Period(after, before);
+        LOG.trace("Request processed at: {}, elapsed time: {}", after, p);
     }
 
     /**
