@@ -90,8 +90,7 @@ public class SiteService {
         			                        .get(ClientResponse.class);
         			
     		if (response.getStatus() != Response.Status.OK.getStatusCode()) {
-    			   // TODO send an error instead of this runtime exception
-    			   throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+    			   throw new RuntimeException("Calling remote service failed with HTTP error code : " + response.getStatus());
     		}
     		LOG.debug("HTTP response Headers: {}", response.getHeaders());
     		output = response.getEntity(String.class);
