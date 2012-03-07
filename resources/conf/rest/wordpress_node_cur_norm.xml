@@ -81,7 +81,7 @@
 
     <!-- Hover event -->
     <event id="hoverEvt">
-        <show status="Cliquez pour afficher le menu de '{sTITLE}'. Double-cliquez pour afficher sa fiche."/>
+        <show status="Click to show this node's menu"/>
     </event>
 
     <!-- Click event -->
@@ -89,12 +89,12 @@
         <popup menu="menu"/>
     </event>
     <menu id="menu" font="menuFnt">
-        <item label="Afficher" font="nameFnt" url="javascript:DisplayNode({sID},{sSLUG},{sTITLE})" />
-        <item label="Centrer sur la carte" font="nameFnt"  url="javascript:DiscoverNode({sID},{sSLUG},{sTITLE})" />
+        <item label="Display" font="nameFnt" url="javascript:DisplayNode({sID},{sSLUG},{sTITLE})" />
+        <item label="Center on this item" font="nameFnt"  url="javascript:DiscoverNode({sID},{sSLUG},{sTITLE})" />
         <separator />
         <menu id="submenu" label="[+80sPOSS_NAME]" font="menuFnt">
-            <item label="Afficher" url="javascript:DisplayLink([sPOSS_ID],[sPOSS_NAME])" />
-            <item label="Center sur la carte" url="javascript:DiscoverLink([sPOSS_ID],[sPOSS_NAME])" />
+            <item label="Display" url="javascript:DisplayLink([sPOSS_ID],[sPOSS_NAME])" />
+            <item label="Highlight on the map" url="javascript:DiscoverLink([sPOSS_ID],[sPOSS_NAME])" />
         </menu>
     </menu>
     <font id="menuFnt" name="Monospaced" size="11"/>

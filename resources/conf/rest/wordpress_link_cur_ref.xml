@@ -24,7 +24,7 @@
 
     <!-- Hover event -->
     <event id="hoverEvt">
-        <show status="Cliquez pour afficher le menu du lien"/>
+        <show status="Click to show this link's menu"/>
         <pop tooltip="tooltip"/>
     </event>
 
@@ -35,8 +35,8 @@
     
     <menu id="menu" font="menuFnt">
         <menu id="submenu" label="[sREC_NAME]" font="menuFnt">
-            <item label="Afficher" url="javascript:DisplayLink([sREC_ID],[sREC_SLUG],[sREC_NAME])" />
-            <item label="Center sur la carte" url="javascript:DiscoverLink([sREC_ID],[sREC_NAME])" />
+            <item label="Display" url="javascript:DisplayLink([sREC_ID],[sREC_SLUG],[sREC_NAME])" />
+            <item label="Highlight on the map" url="javascript:DiscoverLink([sREC_ID],[sREC_NAME])" />
         </menu>
     </menu>
     
