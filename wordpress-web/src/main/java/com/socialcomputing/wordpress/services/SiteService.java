@@ -1,8 +1,11 @@
 package com.socialcomputing.wordpress.services;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.DefaultValue;
@@ -13,7 +16,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
@@ -31,8 +36,10 @@ import com.socialcomputing.wordpress.utils.StringUtils;
 import com.socialcomputing.wordpress.utils.URLUtil;
 import com.socialcomputing.wordpress.utils.log.DiagnosticContext;
 import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
+import com.sun.jersey.core.util.ReaderWriter;
 
 @Path("/sites")
 public class SiteService {
@@ -52,7 +59,6 @@ public class SiteService {
         try {
         	MDC.put(DiagnosticContext.ENTRY_POINT_CTX.name, "GET /sites/site.json?url=" + url);
         	DateTime today = new DateMidnight().toDateTime();
-            String output = "";
             
         	// Getting site information and nb of calls already done from db
             // String domainURL = URLUtil.getDomain(url);
@@ -84,18 +90,17 @@ public class SiteService {
         	}
 
         	LOG.debug("HTTP request Header {}: {}", HttpHeaders.ACCEPT_ENCODING, acceptEncoding);
-        	ClientResponse response = client.resource(url)
+        	ClientResponse clientResponse = client.resource(url)
         			                        .accept(MediaType.APPLICATION_JSON)
         			                        .header(HttpHeaders.ACCEPT_ENCODING, acceptEncoding)
         			                        .get(ClientResponse.class);
         			
-    		if (response.getStatus() != Response.Status.OK.getStatusCode()) {
-    			   throw new RuntimeException("Calling remote service failed with HTTP error code : " + response.getStatus());
+    		if (clientResponse.getStatus() != Response.Status.OK.getStatusCode()) {
+    			   throw new RuntimeException("Calling remote service failed with HTTP error code : " + clientResponse.getStatus());
     		}
-    		LOG.debug("HTTP response Headers: {}", response.getHeaders());
-    		output = response.getEntity(String.class);
+        	
     		
-    		// only update the database if data has been successfully read          
+    		// only update the database if data has been successfully read    
             if(siteInfo == null) {
             	siteInfo = new SiteInfo(normalizedURL, url);
             	this.siteInfoDao.create(siteInfo);
@@ -113,9 +118,7 @@ public class SiteService {
             	siteDaily.incrementUpdate();
             	this.siteDailyDao.update(siteDaily);
             }
-            
-            // Send response with the read data from the remote JSON service
-            return Response.ok(output).build();
+            return this.proxy(clientResponse);
         }
         catch (Exception e) {
             LOG.error(e.getMessage(), e);
@@ -152,4 +155,44 @@ public class SiteService {
         	MDC.remove(DiagnosticContext.ENTRY_POINT_CTX.name);
         }
     }
+    
+    private Response proxy(ClientResponse clientResponse) {
+		// A working solution but not the best
+    	/* DEBUG */
+		/*
+		String contentEncoding = headers.get(HttpHeaders.CONTENT_ENCODING).get(0);
+		InputStream stream = response.getEntityInputStream();
+		ResponseBuilder rb = Response.ok(contentEncoding != null && contentEncoding.equalsIgnoreCase("gzip") ? new GZIPInputStream(stream) : stream);
+			*/
+		
+		MultivaluedMap<String, String> headers = clientResponse.getHeaders();
+		LOG.debug("HTTP response Headers: {}", headers);
+		
+		// Copy response content from remote service 
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try {
+	        ReaderWriter.writeTo(clientResponse.getEntityInputStream(), baos);
+	    } 
+		catch(IOException ex) {
+	        throw new ClientHandlerException(ex);
+	    } 
+		finally {
+			try {
+				clientResponse.getEntityInputStream().close();
+			} 
+			catch (IOException e) {
+				throw new ClientHandlerException(e);
+			}
+	    }
+	    ResponseBuilder rb = Response.ok(baos.toByteArray());
+		
+		// Also copy remote response headers
+		for(Entry<String, List<String>> header : headers.entrySet()) {
+			for(String value : header.getValue()) {
+				rb.header(header.getKey(), value);
+			}
+		}
+        return rb.build();
+    }
+    
 }
