@@ -20,12 +20,14 @@
                 <REST-property id="url" />
                 <REST-property id="poss_id" attribute="id" />
                 <REST-property id="poss_name" attribute="title" />
+                <REST-property id="poss_slug" attribute="slug" />
             </REST-entity>
             <REST-attribute markup="tags" id="id">
                 <REST-property id="title" />
                 <REST-property id="slug" />
                 <REST-property id="poss_id" entity="id" />
                 <REST-property id="poss_name" entity="title" />
+                <REST-property id="poss_slug" attribute="slug" />
             </REST-attribute>
         </REST-entities>
     </entities>
@@ -49,7 +51,8 @@
 				<mapping key="SLUG" value="slug" />
 				<mapping key="URL" value="url" />
 				<mapping key="POSS_ID" value="poss_id" />
-				<mapping key="POSS_NAME" value="poss_name" />
+				<mapping key="POSS_NAME" value="poss_name" />				
+                <mapping key="POSS_SLUG" value="poss_slug" />
 			</attribute-props-mapping>
 		</props-mapping>
 		<entities-recommendation>
@@ -73,6 +76,7 @@
 				<mapping key="URL" value="url" />
 				<mapping key="POSS_ID" value="poss_id" />
 				<mapping key="POSS_NAME" value="poss_name" />
+				<mapping key="POSS_SLUG" value="poss_slug" />
 			</attribute-props-mapping>
 		</props-mapping>
 		<entities-recommendation>
@@ -96,6 +100,7 @@
 				<mapping key="URL" value="url" />
 				<mapping key="POSS_ID" value="poss_id" />
 				<mapping key="POSS_NAME" value="poss_name" />
+				<mapping key="POSS_SLUG" value="poss_slug" />
 			</attribute-props-mapping>
 		</props-mapping>
 		<entities-recommendation>

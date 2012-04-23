@@ -86,18 +86,18 @@
 
 	<!-- Click event -->
 	<event id="clickEvt">
-		<popup menu="menu"/>
+		<popup menu="menu" />
 	</event>
     <menu id="menu" font="menuFnt">
         <item label="Display" font="nameFnt" url="javascript:DisplayNode({sID},{sSLUG},{sTITLE})" />
-        <item label="Center on this item" font="nameFnt"  url="javascript:DiscoverNode({sID},{sSLUG},{sTITLE})" />
+        <item label="Center on this item" font="nameFnt" url="javascript:DiscoverNode({sID},{sSLUG},{sTITLE})" />
         <separator />
         <menu id="submenu" label="[+80sPOSS_NAME]" font="menuFnt">
-            <item label="Display" url="javascript:DisplayLink([sPOSS_ID],[sPOSS_NAME])" />
+            <item label="Display" url="javascript:DisplayLink([sPOSS_ID],[sPOSS_SLUG],[sPOSS_NAME])" />
             <item label="Highlight on the map" url="javascript:DiscoverLink([sPOSS_ID],[sPOSS_NAME])" />
         </menu>
     </menu>
-    <font id="menuFnt" name="Monospaced" size="11"/>
+    <font id="menuFnt" name="Monospaced" size="11" style="plain" />
 
     <!-- DblClkEvt event -->
     <event id="dblClkEvt">
