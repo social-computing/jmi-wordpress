@@ -34,7 +34,7 @@
 
     <menu id="menu" font="menuFnt">
         <menu id="submenu" label="[sREC_NAME]" font="menuFnt">
-            <item label="Display" url="javascript:DisplayLink([sREC_ID],[sREC_SLUG],[sREC_NAME])" />
+            <item label="Display" url="javascript:DisplayLink([sREC_ID],[sREC_SLUG],[sREC_NAME],[sREC_URL])" />
             <item label="Highlight on the map" url="javascript:DiscoverLink([sREC_ID],[sREC_NAME])" />
         </menu>
     </menu>

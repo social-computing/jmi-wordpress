@@ -17,17 +17,20 @@
             <REST-entity markup="posts" id="id">
                 <REST-property id="title" />
                 <REST-property id="slug" />
-                <REST-property id="url" />
+                <REST-property id="url" default=""/>
                 <REST-property id="poss_id" attribute="id" />
                 <REST-property id="poss_name" attribute="title" />
                 <REST-property id="poss_slug" attribute="slug" />
+                <REST-property id="poss_url" attribute="url" />
             </REST-entity>
             <REST-attribute markup="tags" id="id">
                 <REST-property id="title" />
                 <REST-property id="slug" />
+                <REST-property id="url" default=""/>
                 <REST-property id="poss_id" entity="id" />
                 <REST-property id="poss_name" entity="title" />
                 <REST-property id="poss_slug" attribute="slug" />
+                <REST-property id="poss_url" attribute="url" />
             </REST-attribute>
         </REST-entities>
     </entities>
@@ -44,6 +47,7 @@
 				<mapping key="ID" value="id" />
 				<mapping key="TITLE" value="title" />
 				<mapping key="SLUG" value="slug" />
+				<mapping key="URL" value="url" />
 			</entity-props-mapping>
 			<attribute-props-mapping>
 				<mapping key="ID" value="id" />
@@ -53,12 +57,14 @@
 				<mapping key="POSS_ID" value="poss_id" />
 				<mapping key="POSS_NAME" value="poss_name" />				
                 <mapping key="POSS_SLUG" value="poss_slug" />
+                <mapping key="POSS_URL" value="poss_url" />
 			</attribute-props-mapping>
 		</props-mapping>
 		<entities-recommendation>
 			<mapping key="REC_ID"   value="id" />
 			<mapping key="REC_SLUG" value="slug" />
 			<mapping key="REC_NAME" value="title" />
+			<mapping key="REC_URL" value="url" />
 		</entities-recommendation>
 	</analysis-profile>
 
@@ -68,6 +74,7 @@
 				<mapping key="ID" value="id" />
 				<mapping key="TITLE" value="title" />
 				<mapping key="SLUG" value="slug" />
+				<mapping key="URL" value="url" />
 			</entity-props-mapping>
 			<attribute-props-mapping>
 				<mapping key="ID" value="id" />
@@ -77,12 +84,14 @@
 				<mapping key="POSS_ID" value="poss_id" />
 				<mapping key="POSS_NAME" value="poss_name" />
 				<mapping key="POSS_SLUG" value="poss_slug" />
+				<mapping key="POSS_URL" value="poss_url" />
 			</attribute-props-mapping>
 		</props-mapping>
 		<entities-recommendation>
 			<mapping key="REC_ID"   value="id" />
 			<mapping key="REC_SLUG" value="slug" />
 			<mapping key="REC_NAME" value="title" />
+			<mapping key="REC_URL" value="url" />
 		</entities-recommendation>
 	</analysis-profile>
 
@@ -92,6 +101,7 @@
 				<mapping key="ID" value="id" />
 				<mapping key="TITLE" value="title" />
 				<mapping key="SLUG" value="slug" />
+				<mapping key="URL" value="url" />
 			</entity-props-mapping>
 			<attribute-props-mapping>
 				<mapping key="ID" value="id" />
@@ -101,12 +111,14 @@
 				<mapping key="POSS_ID" value="poss_id" />
 				<mapping key="POSS_NAME" value="poss_name" />
 				<mapping key="POSS_SLUG" value="poss_slug" />
+				<mapping key="POSS_URL" value="poss_url" />
 			</attribute-props-mapping>
 		</props-mapping>
 		<entities-recommendation>
 			<mapping key="REC_ID"   value="id" />
 			<mapping key="REC_SLUG" value="slug" />
 			<mapping key="REC_NAME" value="title" />
+			<mapping key="REC_URL" value="url" />
 		</entities-recommendation>
 	</analysis-profile>
 

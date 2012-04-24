@@ -89,11 +89,11 @@
 		<popup menu="menu" />
 	</event>
     <menu id="menu" font="menuFnt">
-        <item label="Display" font="nameFnt" url="javascript:DisplayNode({sID},{sSLUG},{sTITLE})" />
+        <item label="Display" font="nameFnt" url="javascript:DisplayNode({sID},{sSLUG},{sTITLE},{sURL})" />
         <item label="Center on this item" font="nameFnt" url="javascript:DiscoverNode({sID},{sSLUG},{sTITLE})" />
         <separator />
         <menu id="submenu" label="[+80sPOSS_NAME]" font="menuFnt">
-            <item label="Display" url="javascript:DisplayLink([sPOSS_ID],[sPOSS_SLUG],[sPOSS_NAME])" />
+            <item label="Display" url="javascript:DisplayLink([sPOSS_ID],[sPOSS_SLUG],[sPOSS_NAME],[sPOSS_URL])" />
             <item label="Highlight on the map" url="javascript:DiscoverLink([sPOSS_ID],[sPOSS_NAME])" />
         </menu>
     </menu>
@@ -101,6 +101,6 @@
 
     <!-- DblClkEvt event -->
     <event id="dblClkEvt">
-        <open url="javascript:DisplayNode({sID},{sSLUG},{sTITLE})" />
+        <open url="javascript:DisplayNode({sID},{sSLUG},{sTITLE},{sURL})" />
     </event>
 </swatch>
