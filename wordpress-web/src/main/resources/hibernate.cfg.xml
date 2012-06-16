@@ -31,7 +31,6 @@
 		
 		<property name="transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
 		<property name="current_session_context_class">thread</property>
-		<mapping class="com.socialcomputing.wordpress.persistence.model.SiteDaily"/>
         <mapping class="com.socialcomputing.wordpress.persistence.model.SiteInfo"/>
 	</session-factory>
 </hibernate-configuration>

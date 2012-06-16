@@ -1,11 +1,13 @@
 package com.socialcomputing.wordpress.persistence.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.xml.bind.annotation.XmlAttribute;
 
-import org.hibernate.annotations.Type;
-import org.joda.time.DateTime;
+import com.socialcomputing.wordpress.services.SiteService;
 
 @Entity
 public class SiteInfo {
@@ -14,20 +16,23 @@ public class SiteInfo {
     private String url;
 	private String latesturl;
 	
-	@Column
-	@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
-    private DateTime created;
-    
-	@Column
-	@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
-    private DateTime updated;
-    
-    private int quota;
+    @XmlAttribute
+    private long    count;
+    @XmlAttribute
+    private long     quota;
+    @XmlAttribute
+    private long    dailyCount;
+    @XmlAttribute
+    private Date    created;
+    @XmlAttribute
+    private Date    updated;
     
     // default constructor
     public SiteInfo() {
     	this.url = null;
     	this.latesturl = null;
+    	this.count = 0;
+    	this.dailyCount = 0;
     }
     
     /**
@@ -39,8 +44,8 @@ public class SiteInfo {
     public SiteInfo(String url, String latesturl) {
         this.url = url;
         this.latesturl = latesturl;
-        this.created = new DateTime();
-        this.updated = new DateTime();
+        this.created = new Date();
+        this.updated = new Date();
         this.quota = -1;
     }
 
@@ -51,10 +56,18 @@ public class SiteInfo {
      */
     public void updateLatestAccess(String url) {
         this.latesturl = url;
-        this.updated = new DateTime();
+        this.updated = new Date();
+        Date now = new Date();
+        if( !SiteService.isNowSameDayAsDate( this.updated)) {
+            this.dailyCount = 0;
+        }
+        this.count++;
+        this.dailyCount++;
+        this.updated = now;
+        
     }
 
-	public int getQuota() {
+	public long getQuota() {
 		return this.quota;
 	}
 	
@@ -66,11 +79,15 @@ public class SiteInfo {
 		return this.latesturl;
 	}
 	
-	public DateTime getCreated() {
+	public Date getCreated() {
 		return this.created;
 	}
 	
-	public DateTime getUpdated() {
+	public Date getUpdated() {
 		return this.updated;
 	}
+
+	public long getDailyCount() {
+        return this.dailyCount;
+    }
 }

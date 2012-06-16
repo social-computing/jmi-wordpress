@@ -2,6 +2,7 @@ package com.socialcomputing.wordpress.web.filters;
 
 
 import java.io.IOException;
+import java.util.Date;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -10,8 +11,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-import org.joda.time.DateTime;
-import org.joda.time.Period;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -105,15 +104,14 @@ public final class LogContextResetFilter implements Filter {
         MDC.clear();
 
         // Perf logging (Should be done with AOP but don't have time to it now)
-        DateTime before = new DateTime();
+        Date before = new Date();
         LOG.trace("Incoming request at: {}", before);
         
         // And process request.
         chain.doFilter(request, response);
         
-        DateTime after = new DateTime();
-        Period p = new Period(after, before);
-        LOG.trace("Request processed at: {}, elapsed time: {}", after, p);
+        Date after = new Date();
+        LOG.trace("Request processed at: {}", after);
     }
 
     /**
