@@ -55,12 +55,12 @@ public class SiteInfo {
      * @param url     the complete url of the service to call
      */
     public void updateLatestAccess(String url) {
-        this.latesturl = url;
-        this.updated = new Date();
         Date now = new Date();
         if( !SiteService.isNowSameDayAsDate( this.updated)) {
             this.dailyCount = 0;
         }
+        this.latesturl = url;
+        this.updated = new Date();
         this.count++;
         this.dailyCount++;
         this.updated = now;
