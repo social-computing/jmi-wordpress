@@ -9,6 +9,7 @@
         <REST-entities name="Wordpress Rest" type="json" invert="{$invert}">
             <URL-connection type="GET">
                 <url>http://wordpress.wps.cloudbees.net/rest/sites/site.json</url>
+                <url-header name="User-Agent">{$User-Agent}</url-header>
                 <url-parameter name="media">json</url-parameter>
                 <url-parameter name="url">{$wordpressurl}</url-parameter>
                 <url-parameter name="login">{$login}</url-parameter>
@@ -21,7 +22,6 @@
                 <REST-property id="poss_id" attribute="id" />
                 <REST-property id="poss_name" attribute="title" />
                 <REST-property id="poss_slug" attribute="slug" />
-                <REST-property id="poss_url" attribute="url" />
             </REST-entity>
             <REST-attribute markup="tags" id="id">
                 <REST-property id="title" />
@@ -30,7 +30,6 @@
                 <REST-property id="poss_id" entity="id" />
                 <REST-property id="poss_name" entity="title" />
                 <REST-property id="poss_slug" attribute="slug" />
-                <REST-property id="poss_url" attribute="url" />
             </REST-attribute>
         </REST-entities>
     </entities>
@@ -42,12 +41,14 @@
     <affinity-reader-profile name="GlobalAffReader" affinity-reader-ref="JDBC_GlobalAffReader" threshold="100" />
 
     <analysis-profile name="Profile" attributes-ref="JDBC_Profile" type="personal" attribute-size="frequency" attributes-max="40" attributes-base-max="60" cluster="yes" cluster-level="100" cluster-threshold="15" cluster-type="size" attributes-cluster-max="5" balanced-effect="0" entities-max="100" attr-link-threshold="10" links-attribute-threshold="3">
-	    <props-mapping>
-		    <entity-props-mapping>
+		<props-mapping>
+			<entity-props-mapping>
 				<mapping key="ID" value="id" />
 				<mapping key="TITLE" value="title" />
 				<mapping key="SLUG" value="slug" />
-				<mapping key="URL" value="url" />
+				<mapping key="POSS_ID" value="poss_id" />
+				<mapping key="POSS_NAME" value="poss_name" />
+                <mapping key="POSS_SLUG" value="poss_slug" />
 			</entity-props-mapping>
 			<attribute-props-mapping>
 				<mapping key="ID" value="id" />
@@ -55,16 +56,14 @@
 				<mapping key="SLUG" value="slug" />
 				<mapping key="URL" value="url" />
 				<mapping key="POSS_ID" value="poss_id" />
-				<mapping key="POSS_NAME" value="poss_name" />				
-                <mapping key="POSS_SLUG" value="poss_slug" />
-                <mapping key="POSS_URL" value="poss_url" />
+				<mapping key="POSS_NAME" value="poss_name" />
+				<mapping key="POSS_SLUG" value="poss_slug" />
 			</attribute-props-mapping>
-		</props-mapping>
+		</props-mapping>			
 		<entities-recommendation>
-			<mapping key="REC_ID"   value="id" />
+			<mapping key="REC_ID" value="id" />
 			<mapping key="REC_SLUG" value="slug" />
 			<mapping key="REC_NAME" value="title" />
-			<mapping key="REC_URL" value="url" />
 		</entities-recommendation>
 	</analysis-profile>
 
@@ -74,7 +73,9 @@
 				<mapping key="ID" value="id" />
 				<mapping key="TITLE" value="title" />
 				<mapping key="SLUG" value="slug" />
-				<mapping key="URL" value="url" />
+				<mapping key="POSS_ID" value="poss_id" />
+				<mapping key="POSS_NAME" value="poss_name" />
+                <mapping key="POSS_SLUG" value="poss_slug" />
 			</entity-props-mapping>
 			<attribute-props-mapping>
 				<mapping key="ID" value="id" />
@@ -84,14 +85,12 @@
 				<mapping key="POSS_ID" value="poss_id" />
 				<mapping key="POSS_NAME" value="poss_name" />
 				<mapping key="POSS_SLUG" value="poss_slug" />
-				<mapping key="POSS_URL" value="poss_url" />
 			</attribute-props-mapping>
-		</props-mapping>
+		</props-mapping>			
 		<entities-recommendation>
-			<mapping key="REC_ID"   value="id" />
+			<mapping key="REC_ID" value="id" />
 			<mapping key="REC_SLUG" value="slug" />
 			<mapping key="REC_NAME" value="title" />
-			<mapping key="REC_URL" value="url" />
 		</entities-recommendation>
 	</analysis-profile>
 
@@ -101,7 +100,9 @@
 				<mapping key="ID" value="id" />
 				<mapping key="TITLE" value="title" />
 				<mapping key="SLUG" value="slug" />
-				<mapping key="URL" value="url" />
+				<mapping key="POSS_ID" value="poss_id" />
+				<mapping key="POSS_NAME" value="poss_name" />
+                <mapping key="POSS_SLUG" value="poss_slug" />
 			</entity-props-mapping>
 			<attribute-props-mapping>
 				<mapping key="ID" value="id" />
@@ -111,14 +112,12 @@
 				<mapping key="POSS_ID" value="poss_id" />
 				<mapping key="POSS_NAME" value="poss_name" />
 				<mapping key="POSS_SLUG" value="poss_slug" />
-				<mapping key="POSS_URL" value="poss_url" />
 			</attribute-props-mapping>
-		</props-mapping>
+		</props-mapping>			
 		<entities-recommendation>
-			<mapping key="REC_ID"   value="id" />
+			<mapping key="REC_ID" value="id" />
 			<mapping key="REC_SLUG" value="slug" />
 			<mapping key="REC_NAME" value="title" />
-			<mapping key="REC_URL" value="url" />
 		</entities-recommendation>
 	</analysis-profile>
 
