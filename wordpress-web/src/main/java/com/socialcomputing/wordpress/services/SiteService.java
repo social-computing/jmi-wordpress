@@ -40,7 +40,8 @@ public class SiteService {
     @GET
     @Path("site.json")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response record(@QueryParam("url") String url, @QueryParam("login") String login, @QueryParam("password") String password) {
+    public Response record(@HeaderParam("user-agent") String userAgent,
+    		               @QueryParam("url") String url, @QueryParam("login") String login, @QueryParam("password") String password) {
         try {
         	MDC.put(DiagnosticContext.ENTRY_POINT_CTX.name, "GET /sites/site.json?url=" + url);
 
@@ -68,6 +69,8 @@ public class SiteService {
             // Proxy
             UrlHelper urlHelper = new UrlHelper( url);
             urlHelper.addHeader( HttpHeaders.ACCEPT_ENCODING, "gzip");
+            urlHelper.addHeader(HttpHeaders.USER_AGENT, userAgent);
+            
             // if login and password are provided add authentication header
             if(!StringUtils.isBlank(login) && !StringUtils.isBlank(password)) {
                 LOG.debug("login and password provided, adding authentication header with login: {}", login);
