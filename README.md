@@ -1,7 +1,7 @@
-Just Map It! - Labs
-=====================
+Just Map It! - Worpdress
+========================
 
-Applications using Just Map It! hosted in labs
+Just Map It! Wordpress dictionaries and configuration files
 
 
 Copyright
