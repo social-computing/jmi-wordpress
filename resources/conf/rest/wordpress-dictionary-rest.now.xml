@@ -1,0 +1,166 @@
+<dictionary name="wordpressrest">
+    <comment>Wordpress Rest JSON Plan Dictionary</comment>
+	
+    <!-- entities definitions (links) -->
+    <entities>
+        <REST-entities name="Wordpress Rest" type="json" invert="{$invert}" class="com.socialcomputing.wps.server.plandictionary.connectors.datastore.file.rest.RESTEntityConnector" markup="globals">
+            <URL-connection type="GET">
+                <url>http://wordpress.just-map-it.com/rest/sites/site.json</url>
+                <url-parameter name="media">json</url-parameter>
+                <url-parameter name="url">{$wordpressurl}</url-parameter>
+                <url-parameter name="login">{$login}</url-parameter>
+                <url-parameter name="password">{$password}</url-parameter>
+            </URL-connection>	
+            <REST-entity markup="posts" id="id" ponderation="p">
+                <REST-property id="title" />                
+                <REST-property id="slug" />
+                <REST-property id="url" />
+                <REST-property id="poss_id" attribute="id" />
+                <REST-property id="poss_name" attribute="title" />
+                <REST-property id="poss_slug" attribute="slug" />
+            </REST-entity>
+            <REST-attribute markup="tags" id="id">
+                <REST-property id="title" /> 
+                <REST-property id="slug" />
+                <REST-property id="poss_id" entity="id" />
+                <REST-property id="poss_name" entity="title" />
+                <REST-property id="poss_slug" entity="slug" />
+            </REST-attribute>
+        </REST-entities>
+    </entities>
+	
+    <env-property name="$web_context" value="/wps" />
+	
+	<affinity-reader-profile name="AffReader" affinity-reader-ref="JDBC_AffReader" threshold="100" max-entities="2000" />
+	<affinity-reader-profile name="DiscoveryAffReader" affinity-reader-ref="JDBC_DiscoveryAffReader" threshold="100" max-entities="2000" />
+	<affinity-reader-profile name="GlobalAffReader" affinity-reader-ref="JDBC_GlobalAffReader" threshold="100" max-entities="2000" />
+
+	<analysis-profile name="Profile" attributes-ref="JDBC_Profile" type="personal" attribute-size="frequency" attributes-max="20" attributes-base-max="60" cluster="yes" cluster-level="100" cluster-threshold="15" cluster-type="size" attributes-cluster-max="5" balanced-effect="0" entities-max="100" attr-link-threshold="10" links-attribute-threshold="3">
+		<props-mapping>
+			<entity-props-mapping>
+				<mapping key="ID" value="id" />
+				<mapping key="TITLE" value="title" />
+				<mapping key="SLUG" value="slug" />
+				<mapping key="POSS_ID" value="poss_id" />
+				<mapping key="POSS_NAME" value="poss_name" />
+                <mapping key="POSS_SLUG" value="poss_slug" />
+			</entity-props-mapping>
+			<attribute-props-mapping>
+				<mapping key="ID" value="id" />
+				<mapping key="TITLE" value="title" />
+				<mapping key="SLUG" value="slug" />
+				<mapping key="URL" value="url" />
+				<mapping key="POSS_ID" value="poss_id" />
+				<mapping key="POSS_NAME" value="poss_name" />
+				<mapping key="POSS_SLUG" value="poss_slug" />
+			</attribute-props-mapping>
+		</props-mapping>
+		<entities-recommendation apply="all" max="10" threshold="20">
+			<mapping key="REC_ID" value="id" />
+			<mapping key="REC_SLUG" value="slug" />
+			<mapping key="REC_NAME" value="title" />
+		</entities-recommendation>
+	</analysis-profile>
+
+        <analysis-profile name="DiscoveryProfile" attributes-ref="JDBC_Profile" type="discovery" attribute-size="frequency" attributes-max="20" attributes-base-max="60" cluster="yes" cluster-level="100" cluster-threshold="15" cluster-type="size" attributes-cluster-max="5" balanced-effect="0" entities-max="100" attr-link-threshold="10" links-attribute-threshold="3">
+		<props-mapping>
+			<entity-props-mapping>
+				<mapping key="ID" value="id" />
+				<mapping key="TITLE" value="title" />
+				<mapping key="SLUG" value="slug" />
+				<mapping key="POSS_ID" value="poss_id" />
+				<mapping key="POSS_NAME" value="poss_name" />
+                                <mapping key="POSS_SLUG" value="poss_slug" />
+			</entity-props-mapping>
+			<attribute-props-mapping>
+				<mapping key="ID" value="id" />
+				<mapping key="TITLE" value="title" />
+				<mapping key="SLUG" value="slug" />
+                                <mapping key="URL" value="url" />
+				<mapping key="POSS_ID" value="poss_id" />
+				<mapping key="POSS_NAME" value="poss_name" />
+                                <mapping key="POSS_SLUG" value="poss_slug" />
+			</attribute-props-mapping>
+		</props-mapping>
+		<entities-recommendation apply="all" max="10" threshold="20">
+			<mapping key="REC_ID" value="id" />
+			<mapping key="REC_SLUG" value="slug" />
+			<mapping key="REC_NAME" value="title" />
+		</entities-recommendation>
+	</analysis-profile>
+
+	<analysis-profile name="GlobalProfile" attributes-ref="JDBC_Profile" type="global" attribute-size="same" attributes-max="20" cluster="yes" cluster-level="100" cluster-threshold="15" cluster-type="size" attributes-cluster-max="5" balanced-effect="0" entities-max="100" attributes-base-max="60" attr-link-threshold="10" links-attribute-threshold="4">
+		<props-mapping>
+			<entity-props-mapping>
+				<mapping key="ID" value="id" />
+				<mapping key="TITLE" value="title" />
+				<mapping key="SLUG" value="slug" />
+				<mapping key="POSS_ID" value="poss_id" />
+				<mapping key="POSS_NAME" value="poss_name" />
+                                <mapping key="POSS_SLUG" value="poss_slug" />
+			</entity-props-mapping>
+			<attribute-props-mapping>
+				<mapping key="ID" value="id" />
+				<mapping key="TITLE" value="title" />
+				<mapping key="SLUG" value="slug" />
+                                <mapping key="URL" value="url" />
+				<mapping key="POSS_ID" value="poss_id" />
+				<mapping key="POSS_NAME" value="poss_name" />
+                                <mapping key="POSS_SLUG" value="poss_slug" />
+			</attribute-props-mapping>
+		</props-mapping>
+		<entities-recommendation apply="all" max="10" threshold="20">
+			<mapping key="REC_ID" value="id" />
+			<mapping key="REC_SLUG" value="slug" />
+			<mapping key="REC_NAME" value="title" />
+		</entities-recommendation>
+	</analysis-profile>
+
+	<display-profile name="Display" display-empty-links="no" in-color="ffffff" out-color="0" filter-color="56b2ff" display-entities="no" display-fake-links="yes">
+		<swatch-segmentation>
+			<attribute-swatch>
+				<norm-swatch default-ref="WORDPRESS_NODE_NORM" />
+				<ref-swatch default-ref="WORDPRESS_NODE_REF" />
+				<active-norm-swatch default-ref="WORDPRESS_NODE_CUR_NORM" />
+				<active-ref-swatch default-ref="WORDPRESS_NODE_CUR_REF" />
+			</attribute-swatch>
+			<link-swatch>
+				<norm-swatch default-ref="WORDPRESS_LINK_NORM" />
+				<ref-swatch default-ref="WORDPRESS_LINK_REF" />
+				<active-norm-swatch default-ref="WORDPRESS_LINK_CUR_NORM" />
+				<active-ref-swatch default-ref="WORDPRESS_LINK_CUR_REF" />
+			</link-swatch>
+		</swatch-segmentation>
+		<selection-swatch name="search" />
+	</display-profile>
+
+	<display-profile name="GlobalDisplay" display-empty-links="no" display-fake-links="no" in-color="ffffff" out-color="0" filter-color="56b2ff" display-entities="no">
+		<swatch-segmentation>
+			<attribute-swatch>
+				<norm-swatch default-ref="WORDPRESS_NODE_NORM" />
+				<ref-swatch default-ref="WORDPRESS_NODE_REF" />
+				<active-norm-swatch default-ref="WORDPRESS_NODE_CUR_NORM" />
+				<active-ref-swatch default-ref="WORDPRESS_NODE_CUR_REF" />
+			</attribute-swatch>
+			<link-swatch>
+				<norm-swatch default-ref="WORDPRESS_LINK_NORM" />
+				<ref-swatch default-ref="WORDPRESS_LINK_REF" />
+				<active-norm-swatch default-ref="WORDPRESS_LINK_CUR_NORM" />
+				<active-ref-swatch default-ref="WORDPRESS_LINK_CUR_REF" />
+			</link-swatch>
+		</swatch-segmentation>
+		<selection-swatch name="search" />
+	</display-profile>
+
+	<segmentation>
+		<analysis-segmentation default-ref="Profile" />
+		<affinity-reader-segmentation default-ref="AffReader">
+			<affreader-analysis-mapping analysis-ref="DiscoveryProfile" default-ref="DiscoveryAffReader" />
+			<affreader-analysis-mapping analysis-ref="GlobalProfile" default-ref="GlobalAffReader" />
+		</affinity-reader-segmentation>
+		<display-segmentation default-ref="Display">
+			<display-analysis-mapping analysis-ref="GlobalProfile" default-ref="GlobalDisplay" />
+		</display-segmentation>
+	</segmentation>
+</dictionary>
+
